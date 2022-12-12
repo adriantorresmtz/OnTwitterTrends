@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  ApiURL: 'https://localhost:7199'   //Prod -> 'https://localhost:5001' // Debug ->  'https://localhost:7199'  
+  ApiURL: 'https://ontwitter.azurewebsites.net'   //Prod -> 'https://localhost:5001' // Debug ->  'https://localhost:7199'  
 };
 
 /*
