@@ -10,8 +10,10 @@ using Tweetinvi.Parameters.V2;
 
 namespace OnTwitter.Api.HostService;
 
-public class BackRunningServices : IHostedService, IBackRunningServices 
+public class BackRunningServices : IHostedService, IBackRunningServices
 {
+    #region Declarations
+
     private readonly IServiceProvider _serviceProvider;
     private readonly ITwitterService _service;
     private readonly ILogger _log;
@@ -20,15 +22,24 @@ public class BackRunningServices : IHostedService, IBackRunningServices
     private readonly TwitterClient _appClient;
     public bool isRunning { get; set; }
     public bool isStopRequest { get; set; }
+
+    #endregion
+
+    #region Constructor
+
     public BackRunningServices(ILogger<BackRunningServices> log, IServiceProvider serviceProvider, IHubContext<TwitterReportHub> hubContext, TwitterClient appClient)
     {
         _log = log;
         _serviceProvider = serviceProvider;
-        _appClient= appClient;
+        _appClient = appClient;
         _hubContext = hubContext;
 
         sampleStreamV2 = _appClient.StreamsV2.CreateSampleStream();
     }
+
+    #endregion
+
+    #region Methods
 
 
     public Task StartAsync(CancellationToken cancellationToken)
@@ -55,12 +66,12 @@ public class BackRunningServices : IHostedService, IBackRunningServices
         return Task.CompletedTask;
     }
 
-    private async Task  GetInfoFromTwitter(CancellationToken cancellationToken)
+    private async Task GetInfoFromTwitter(CancellationToken cancellationToken)
     {
         _log.LogInformation($"Getting twitters Background Service is working.  {DateTime.Now}");
         try
         {
-            
+
             using (IServiceScope scope = _serviceProvider.CreateScope())
             {
                 ITwitterService scopedProcessingService = scope.ServiceProvider.GetRequiredService<ITwitterService>();
@@ -68,7 +79,6 @@ public class BackRunningServices : IHostedService, IBackRunningServices
                 ProcessTwitters(scopedProcessingService);
 
                 var twitterparams = new StartFilteredStreamV2Parameters();
-                
 
                 await sampleStreamV2.StartAsync();
 
@@ -91,12 +101,12 @@ public class BackRunningServices : IHostedService, IBackRunningServices
             {
                 var tweetResp = args.Tweet;
 
-                if (tweetResp.Lang == "en") 
+                if (tweetResp.Lang == "en")
                 {
                     var twiiterEnty = new TwitterDto() { TwitterAuthor = tweetResp.AuthorId, TwitterId = tweetResp.Id };
                     await scopedProcessingService.InsertTwitter(twiiterEnty);
 
-                    await _hubContext.Clients.All.SendAsync("TwitterTotal", new { data = await scopedProcessingService.GetTwittersTotal()});
+                    await _hubContext.Clients.All.SendAsync("TwitterTotal", new { data = await scopedProcessingService.GetTwittersTotal() });
 
 
                     if (tweetResp.Entities.Hashtags?.Length > 0)
@@ -123,5 +133,8 @@ public class BackRunningServices : IHostedService, IBackRunningServices
     {
         isRunning = false;
     }
+
+    #endregion
+
 
 }

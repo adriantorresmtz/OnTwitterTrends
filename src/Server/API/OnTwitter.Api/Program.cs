@@ -1,6 +1,4 @@
 
-using Autofac.Core;
-using Microsoft.Extensions.Configuration;
 using OnTwitter.Api.HostService;
 using OnTwitter.Api.Hubs;
 using OnTwitter.Application;
@@ -39,6 +37,7 @@ builder.Services.AddApplicationServices();
 //Back service
 builder.Services.AddSingleton<IBackRunningServices, BackRunningServices>();
 builder.Services.AddHostedService<BackRunningServices>();
+
 
 // Set Service for TwitterClient
 builder.Services.AddSingleton<TwitterClient>(appClient);

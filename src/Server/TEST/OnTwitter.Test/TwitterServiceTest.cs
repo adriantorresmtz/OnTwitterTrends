@@ -87,24 +87,6 @@ public class TwitterServiceTest
     [Fact]
     public async Task GetTwittersAsync()
     {
-        //// Arrange
-        //var testObject = new Twitter() { Id = 1, TwitterId ="123456", TwitterAuthor ="4587898" };
-        //var testList = new List<Twitter>() { testObject };
-
-        //var dbSetMock = new Mock<DbSet<Twitter>>();
-
-
-
-        //var contextDB = new Mock<TwitterDbContext>();
-        //contextDB.Setup(x => x.Set<Twitter>()).Returns(dbSetMock.Object);
-
-        //// Act
-        //var TwitterRepo = new GenericRepository<Twitter>(contextDB.Object);
-        //var result = TwitterRepo.GetAll();
-
-        //// Assert
-        ///
-
         // Arrange
         var mockContext = CreateDbContext();
         var sut = new GenericRepository<Twitter>(mockContext);
@@ -117,6 +99,77 @@ public class TwitterServiceTest
         //Assert
         Assert.True(mockContext.Twitters.Count() == 1);
 
+    }
+
+    [Fact]
+    public async Task GetTwitterHashTagsAsync()
+    {
+        // Arrange
+        var mockContext = CreateDbContext();
+        var sut = new GenericRepository<TwitterHashTag>(mockContext);
+        var twitterhashTag = new TwitterHashTag { HashTag = "Development", TwitterId = "7854111" };
+        //Act
+        var result = await sut.Add(twitterhashTag);
+        await mockContext.SaveChangesAsync();
+        Assert.True(result);
+
+        //Assert
+        Assert.True(mockContext.TwitterHashTags.Count() == 1);
+
+    }
+
+    [Fact]
+    public async Task GetTotalTwitters()
+    {
+        // Arrange
+
+        var mockContext = CreateDbContext();
+        var repoTwitter = new GenericRepository<Twitter>(mockContext);
+        var twitter = new Twitter {TwitterId = "7854111", TwitterAuthor = "1548878987"};
+        //Act
+        var result = await repoTwitter.Add(twitter);
+        await mockContext.SaveChangesAsync();
+
+        var TwitterResult = new Twitter() { Id = 1, TwitterId = "7854111", TwitterAuthor = "1548878987" };
+
+        var mappingService = new Mock<IMapper>();
+        var unitOfWorkMock = new UnitOfWork(mockContext);
+        mappingService.Setup(mock => mock.Map<Twitter>(It.IsAny<TwitterDto>())).Returns(TwitterResult);
+
+        ITwitterService sut = new TwitterService(unitOfWorkMock, mappingService.Object);
+
+        //Act
+        var response = await sut.GetTwittersTotal();
+
+        //Assert
+        Assert.True(response == 1);
+    }
+
+    [Fact]
+    public async Task GetTotalTwitterHashTags() {
+        // Arrange
+
+        var mockContext = CreateDbContext();
+        var repoTwitterHashTags = new GenericRepository<TwitterHashTag>(mockContext);
+        var twitterhashTag = new TwitterHashTag { HashTag = "Development", TwitterId = "7854111" };
+        //Act
+        var result = await repoTwitterHashTags.Add(twitterhashTag);
+        await mockContext.SaveChangesAsync();
+
+        var TwitterHashTagResult = new TwitterHashTag() { Id = 1, HashTag = "Development", TwitterId = "7854111" };
+
+        var mappingService = new Mock<IMapper>();
+        var unitOfWorkMock = new UnitOfWork(mockContext);
+        mappingService.Setup(mock => mock.Map<TwitterHashTag>(It.IsAny<TwitterHashTagDto>())).Returns(TwitterHashTagResult);
+
+        ITwitterService sut = new TwitterService(unitOfWorkMock, mappingService.Object);
+
+
+        //Act
+        var response = await sut.GetTwitterHashTagsTop(1);
+
+        //Assert
+        Assert.True(response.TotalTwitterHashTagsTotal == 1);
     }
 
     private TwitterDbContext CreateDbContext()
