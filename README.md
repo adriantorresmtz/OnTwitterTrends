@@ -1,6 +1,9 @@
 # OnTwitterTrends
 This app display information in real time about hashtags in twitter
 
+![image](https://user-images.githubusercontent.com/21364401/206961323-bb82b4b1-cebc-41ca-adc0-0675e61bb0c8.png)
+
+
 
 ## How to test
 
