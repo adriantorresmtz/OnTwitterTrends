@@ -9,7 +9,7 @@ This application displays in real time the Top 10 HashTags in twitter, total twi
 
 ## Development server
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Run `ng serve` for a dev server. Navigate to `http://localhost:2301/`. The app will automatically reload if you change any of the source files.
 
 ## Build
 
