@@ -7,6 +7,31 @@ This app display information in real time about hashtags in twitter
 
 ## How to test
 
+#Published
+
+Step 1 -
+     Start twitter collection service
+     
+     On postman call with Get verb this url ->
+     
+            https://ontwitter.azurewebsites.net/api/twitter/v1/Start
+   
+Step 2 -
+     Open browser url -> 
+                
+                 https://adriantorresmtz.github.io/OnTwitterTrends/
+
+![image](https://user-images.githubusercontent.com/21364401/207730419-7530ed5d-0031-4f4f-ba70-ecd00319ceae.png)
+
+# Stop twitter data collection service
+
+Step 1-
+ On postman call with Get verb this url ->
+     
+            https://ontwitter.azurewebsites.net/api/twitter/v1/Stop
+
+#Local Enviroment
+
 Step 1 -  
       Run Server project
 
