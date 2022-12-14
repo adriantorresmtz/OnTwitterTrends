@@ -7,7 +7,7 @@ This app display information in real time about hashtags in twitter
 
 ## How to test
 
-#Published
+# Published
 
 Step 1 -
      Start twitter collection service
@@ -30,7 +30,7 @@ Step 1-
      
             https://ontwitter.azurewebsites.net/api/twitter/v1/Stop
 
-#Local Enviroment
+# Local Enviroment
 
 Step 1 -  
       Run Server project
