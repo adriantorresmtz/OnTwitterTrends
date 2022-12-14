@@ -15,7 +15,6 @@ public class BackRunningServices : IHostedService, IBackRunningServices
     #region Declarations
 
     private readonly IServiceProvider _serviceProvider;
-    private readonly ITwitterService _service;
     private readonly ILogger _log;
     private ISampleStreamV2 sampleStreamV2;
     private readonly IHubContext<TwitterReportHub> _hubContext;
@@ -23,6 +22,8 @@ public class BackRunningServices : IHostedService, IBackRunningServices
     public bool isRunning { get; set; }
     public bool isStopRequest { get; set; }
 
+    private readonly int maxRecords = 5000; //Set Max number
+    private int readRecords = 0;
     #endregion
 
     #region Constructor
@@ -99,10 +100,16 @@ public class BackRunningServices : IHostedService, IBackRunningServices
         {
             if (isRunning)
             {
+                if ((readRecords > maxRecords) || isStopRequest) {
+                    sampleStreamV2.StopStream();
+                    isRunning= false;
+                }
                 var tweetResp = args.Tweet;
 
                 if (tweetResp.Lang == "en")
                 {
+                    readRecords ++;
+
                     var twiiterEnty = new TwitterDto() { TwitterAuthor = tweetResp.AuthorId, TwitterId = tweetResp.Id };
                     await scopedProcessingService.InsertTwitter(twiiterEnty);
 

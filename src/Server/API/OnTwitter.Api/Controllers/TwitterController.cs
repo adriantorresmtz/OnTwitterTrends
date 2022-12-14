@@ -24,7 +24,6 @@ public class TwitterController : ControllerBase
     {
         _logger = logger;
         _backservice = backservice;
-        _ = StartTwitterBackService();
     }
 
     #endregion
