@@ -53,3 +53,6 @@ Step 1 -
 
 Step 1 -
      On Swagger call andpoint ->   api/twitter/v1/start 
+     
+![image](https://user-images.githubusercontent.com/21364401/207731188-776708e6-5060-4b37-b109-5d10af61d46b.png)
+
